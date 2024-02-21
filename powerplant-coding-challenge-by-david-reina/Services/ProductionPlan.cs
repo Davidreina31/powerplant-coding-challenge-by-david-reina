@@ -18,10 +18,10 @@ namespace powerplant_coding_challenge.Services
 
                 if (powerPlantsSortedByPrice[i].Type == "windturbine")
                 {
-                    if (adjustment > powerPlantsSortedByPrice[i].Pmax)
-                    {
-                        production = payload.Fuels.Wind * powerPlantsSortedByPrice[i].Pmax / 100.0;
+                    production = payload.Fuels.Wind * powerPlantsSortedByPrice[i].Pmax / 100.0;
 
+                    if (adjustment >= production)
+                    {
                         if (i + 1 < powerPlantsSortedByPrice.Count)
                         {
                             if (adjustment - production >= powerPlantsSortedByPrice[i + 1].Pmin)
@@ -33,12 +33,6 @@ namespace powerplant_coding_challenge.Services
                                 production = payload.Load - adjustment >= powerPlantsSortedByPrice[i].Pmin ? payload.Load - adjustment : 0;
                             }
                         }
-                    }
-
-                    else if (adjustment >= powerPlantsSortedByPrice[i].Pmin)
-                    {
-                        production = adjustment;
-                        adjustment -= production;
                     }
 
                     else
@@ -77,22 +71,35 @@ namespace powerplant_coding_challenge.Services
                 productionResults.Add(new ProductionResult { Name = powerPlantsSortedByPrice[i].Name, P = production });
             }
 
+
+
             return productionResults;
         }
+
 
         private static List<Powerplant> CalculateFuelCost(Payload payload)
         {
             var costsList = new List<Powerplant>();
 
+            var windTurbine = 0;
+
+            foreach (var item in payload.Powerplants.Where(x => x.Type == "windturbine"))
+            {
+                windTurbine += payload.Fuels.Wind * item.Pmax / 100;
+            }
+
+            var remaining = payload.Load - windTurbine;
+
             costsList = payload.Powerplants.OrderBy(x =>
             {
                 if (x.Type == "gasfired")
-                    return (1 / x.Efficiency) * payload.Fuels.Gas;
+                    return x.Pmin <= remaining ? (1 / x.Efficiency) * payload.Fuels.Gas * remaining : 1 / (x.Efficiency) * payload.Fuels.Gas * x.Pmin;
                 else if (x.Type == "turbojet")
-                    return (1 / x.Efficiency) * payload.Fuels.Kerosine;
+                    return (1 / x.Efficiency) * payload.Fuels.Kerosine * remaining;
                 else
                     return 0;
             }).ToList();
+
 
             return costsList;
         }
