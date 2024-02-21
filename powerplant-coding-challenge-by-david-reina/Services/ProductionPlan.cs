@@ -9,6 +9,7 @@ namespace powerplant_coding_challenge.Services
         {
             List<ProductionResult> productionResults = new List<ProductionResult>();
             var powerPlantsSortedByPrice = CalculateFuelCost(payload);
+
             double adjustment = payload.Load;
 
             foreach (var powerplant in powerPlantsSortedByPrice)
@@ -20,7 +21,7 @@ namespace powerplant_coding_challenge.Services
                     production = payload.Fuels.Wind * powerplant.Pmax / 100.0;
                     adjustment -= production;
                 }
-                else 
+                else
                 {
                     if (adjustment > powerplant.Pmax)
                     {
@@ -49,11 +50,12 @@ namespace powerplant_coding_challenge.Services
         {
             var costsList = new List<Powerplant>();
 
-            costsList = payload.Powerplants.OrderBy(x => {
+            costsList = payload.Powerplants.OrderBy(x =>
+            {
                 if (x.Type == "gasfired")
-                    return payload.Fuels.Gas;
+                    return (1 / x.Efficiency) * payload.Fuels.Gas;
                 else if (x.Type == "turbojet")
-                    return payload.Fuels.Kerosine;
+                    return (1 / x.Efficiency) * payload.Fuels.Kerosine;
                 else
                     return 0;
             }).ToList();
