@@ -1,7 +1,12 @@
-﻿using powerplant_coding_challenge.Contracts;
-using powerplant_coding_challenge.Models;
+﻿using Business.Contracts;
+using Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace powerplant_coding_challenge.Services
+namespace Business.Services
 {
     public class ProductionPlan : IProductionPlan
     {

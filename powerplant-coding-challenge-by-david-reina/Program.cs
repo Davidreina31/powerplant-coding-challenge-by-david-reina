@@ -1,5 +1,5 @@
-using powerplant_coding_challenge.Contracts;
-using powerplant_coding_challenge.Services;
+using Business.Contracts;
+using Business.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +12,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IProductionPlan, ProductionPlan>();
 builder.Services.AddCors();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 

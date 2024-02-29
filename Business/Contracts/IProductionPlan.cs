@@ -1,6 +1,6 @@
-﻿using powerplant_coding_challenge.Models;
+﻿using Domain;
 
-namespace powerplant_coding_challenge.Contracts
+namespace Business.Contracts
 {
     public interface IProductionPlan
     {
