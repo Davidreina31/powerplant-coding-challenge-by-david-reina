@@ -17,7 +17,7 @@ namespace powerplant_coding_challenge.Controllers
         [HttpPost("/productionplan")]
         public ActionResult<IEnumerable<ProductionResult>> CalculateProductionPlan([FromBody] Payload payload)
         {
-           return Ok(_productionPlan.CalulateProduction(payload));
+           return Ok(_productionPlan.CalculateProduction(payload));
         }
     }
     

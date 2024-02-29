@@ -4,6 +4,6 @@ namespace powerplant_coding_challenge.Contracts
 {
     public interface IProductionPlan
     {
-        List<ProductionResult> CalulateProduction(Payload payload);
+        IEnumerable<ProductionResult> CalculateProduction(Payload payload);
     }
 }
